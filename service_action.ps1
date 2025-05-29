@@ -59,6 +59,7 @@ if ($null -ne $service) {
 } else {
     Write-Output "Service not found: $Using:service_name"
 }
+}
 
 Invoke-Command `
     -Session $session `
