@@ -36,18 +36,28 @@ $script = {
     # https://docs.microsoft.com/en-us/powershell/module/?term=webadministration
 
     # Only try to stop if it exists
-    $exists = Get-Service -Name $Using:service_name -ErrorAction 'SilentlyContinue'
-    if ($exists) {
-        if ($Using:action -eq 'stop' -or $Using:action -eq 'restart') {
+$service = Get-Service -Name $Using:service_name -ErrorAction Stop
+
+if ($null -ne $service) {
+    if ($Using:action -eq 'stop' -or $Using:action -eq 'restart') {
+        if ($service.Status -eq 'Running') {
+            Write-Output "Stopping service: $Using:service_name"
             net stop $Using:service_name
+        } else {
+            Write-Output "Service $Using:service_name is not running, no need to stop."
         }
-        if ($Using:action -eq 'start' -or $Using:action -eq 'restart') {
+    }
+
+    if ($Using:action -eq 'start' -or $Using:action -eq 'restart') {
+        if ($service.Status -ne 'Running') {
+            Write-Output "Starting service: $Using:service_name"
             net start $Using:service_name
+        } else {
+            Write-Output "Service $Using:service_name is already running."
         }
     }
-    else {
-        Write-Output "Service not found: $Using:service_name"
-    }
+} else {
+    Write-Output "Service not found: $Using:service_name"
 }
 
 Invoke-Command `
