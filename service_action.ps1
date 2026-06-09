@@ -31,7 +31,7 @@ Write-Output $display_action
 # Establish Remote Session
 $credential = [PSCredential]::new($user_id, $password)
 $so = New-PSSessionOption -SkipCACheck -SkipCNCheck -SkipRevocationCheck
-$session = New-PSSession $server -SessionOption $so -UseSSL -Credential $credential
+$session = New-PSSession $server -SessionOption $so -Credential $credential
 
 $script = {
     # Relies on WebAdministration Module being installed on the remote server
