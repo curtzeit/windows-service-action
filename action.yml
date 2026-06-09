@@ -23,6 +23,11 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Configure PowerShell Execution Policy
+      shell: powershell
+      run: |
+        Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser -Force
+        
     - name: Action
       id: action
       shell: powershell
@@ -35,7 +40,8 @@ runs:
         
         $action_lower = "$('${{ inputs.action }}'.ToLower())"
 
-        PowerShell -ExecutionPolicy Bypass -File "${{ github.action_path }}/service_action.ps1" `
+        # Look Mom, no extra flags!
+        & "${{ github.action_path }}/service_action.ps1" `
           -action $action_lower `
           -service_name '${{ inputs.service-name }}' `
           -server '${{ inputs.server }}' `
