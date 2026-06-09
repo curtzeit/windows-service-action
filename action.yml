@@ -40,7 +40,6 @@ runs:
         
         $action_lower = "$('${{ inputs.action }}'.ToLower())"
 
-        # Look Mom, no extra flags!
         & "${{ github.action_path }}/service_action.ps1" `
           -action $action_lower `
           -service_name '${{ inputs.service-name }}' `
